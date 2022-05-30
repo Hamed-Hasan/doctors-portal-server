@@ -193,7 +193,7 @@ app.put('/user/admin/:email', verifyJWT, async (req, res) => {
 })
 
 
-// when user login and sign in add jwt verify with localstorage
+// when user login and sign in 
 app.put('/user/:email', async (req, res) => {
   const email = req.params.email;
   const user = req.body;
@@ -267,7 +267,21 @@ app.put('/user/:email', async (req, res) => {
       res.send(booking);
     })
 
-   
+    // create booking 
+    app.post('/booking', async (req, res) => {
+      const booking = req.body;
+      const query = { treatment: booking.treatment, date: booking.date, patient: booking.patient }
+      const exists = await bookingCollection.findOne(query);
+      if (exists) {
+        return res.send({ success: false, booking: exists })
+      }
+      const result = await bookingCollection.insertOne(booking);
+      console.log('sending email');
+      sendAppointmentEmail(booking);
+      return res.send({ success: true, result });
+    })
+
+
   }
   finally {
 
