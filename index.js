@@ -162,6 +162,16 @@ app.post('/create-payment-intent', verifyJWT, async(req, res) =>{
 
 
 
+// new user can't be access all user route 
+// verify admin with email : using hooks > useAdmin
+app.get('/admin/:email', async(req, res) =>{
+  const email = req.params.email;
+  const user = await userCollection.findOne({email: email});
+  const isAdmin = user.role === 'admin';
+  res.send({admin: isAdmin})
+})
+
+
   }
   finally {
 
