@@ -154,7 +154,14 @@ app.post('/create-payment-intent', verifyJWT, async(req, res) =>{
       res.send(services);
     });
 
-   
+    // show all email users
+    app.get('/user',verifyJWT, async (req, res) => {
+      const user = await userCollection.find().toArray();
+      res.send(user);
+    })
+
+
+
   }
   finally {
 
