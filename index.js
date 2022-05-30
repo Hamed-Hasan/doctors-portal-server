@@ -171,6 +171,28 @@ app.get('/admin/:email', async(req, res) =>{
   res.send({admin: isAdmin})
 })
 
+// create admin with click button
+app.put('/user/admin/:email', verifyJWT, async (req, res) => {
+  const email = req.params.email;
+  // admin verify new code
+  // const requester = req.decoded.email;
+  // const requesterAccount = await userCollection.findOne({ email: requester });
+  // if(requesterAccount.role === 'admin') {
+     // admin verify conditions old code
+    const filter = { email: email };
+    const options = { upsert: true };
+    const updateDoc = {
+      $set: {role: 'admin'},
+    };
+    const result = await userCollection.updateOne(filter, updateDoc, options);
+    res.send( result);
+  // }else{
+  //   res.status(403).send({message: 'forbidden'});
+  // }
+
+})
+
+
 
   }
   finally {
