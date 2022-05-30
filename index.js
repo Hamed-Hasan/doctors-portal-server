@@ -308,7 +308,28 @@ app.put('/user/:email', async (req, res) => {
       res.send(result)
     })
   
-   }
+    // create doctors 
+    app.post('/doctors', verifyJWT, verifyAdmin, async (req, res) => {
+      const body = req.body;
+      const result = await doctorCollection.insertOne(body)
+      res.send(result);
+    })
+
+  // delete doctor
+  app.delete('/doctor/:email',verifyJWT, verifyAdmin, async (req, res) => {
+    const email = req.params.email;
+    const filter = { email: email };
+    const result = await doctorCollection.deleteOne(filter)
+    res.send(result)
+  })
+  // delete user
+  app.delete('/user/:email',verifyJWT, verifyAdmin, async (req, res) => {
+    const email = req.params.email;
+    const filter = { email: email };
+    const result = await userCollection.deleteOne(filter)
+    res.send(result)
+  })
+  }
   finally {
 
   }
