@@ -282,7 +282,33 @@ app.put('/user/:email', async (req, res) => {
     })
 
 
-  }
+    // update booking for stripe
+    app.patch('/booking/:id', verifyJWT, async(req, res) =>{
+      const id  = req.params.id;
+      const payment = req.body;
+      const filter = {_id: ObjectId(id)};
+      const updatedDoc = {
+        $set: {
+          paid: true,
+          transactionId: payment.transactionId
+        }
+      }
+
+      const result = await paymentCollection.insertOne(payment);
+      const updatedBooking = await bookingCollection.updateOne(filter, updatedDoc);
+      sendPaymentConfirmationEmail(payment)
+      res.send(updatedBooking);
+    })
+
+
+
+    // show all doctors 
+    app.get('/doctors',verifyJWT, verifyAdmin, async (req, res) => {
+      const result = await doctorCollection.find().toArray();
+      res.send(result)
+    })
+  
+   }
   finally {
 
   }
