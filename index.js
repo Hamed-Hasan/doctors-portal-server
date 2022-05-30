@@ -236,7 +236,30 @@ app.put('/user/:email', async (req, res) => {
       res.send(services);
     })
 
-  }
+    /**
+     * API Naming Convention
+     * app.get('/booking') // get all bookings in this collection. or get more than one or by filter
+     * app.get('/booking/:id') // get a specific booking 
+     * app.post('/booking') // add a new booking
+     * app.patch('/booking/:id) //
+     * app.delete('/booking/:id) //
+    */
+
+  // verify all booking user & all booking user
+     app.get('/booking', verifyJWT, async (req, res) => {
+      const patient = req.query.patient;
+      const decodedEmail = req.decoded.email;
+      if (patient === decodedEmail) {
+        const query = { patient: patient };
+        const bookings = await bookingCollection.find(query).toArray();
+        return res.send(bookings);
+      }
+      else {
+        return res.status(403).send({ message: 'forbidden access' });
+      }
+    })
+
+    }
   finally {
 
   }
