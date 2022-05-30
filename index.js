@@ -147,6 +147,13 @@ app.post('/create-payment-intent', verifyJWT, async(req, res) =>{
 });
 
 
+    app.get('/service', async (req, res) => {
+      const query = {};
+      const cursor = serviceCollection.find(query).project({name: 1});
+      const services = await cursor.toArray();
+      res.send(services);
+    });
+
    
   }
   finally {
