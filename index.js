@@ -259,7 +259,16 @@ app.put('/user/:email', async (req, res) => {
       }
     })
 
-    }
+    // booking verifyJWT & single booking show
+    app.get('/booking/:id', verifyJWT, async(req, res) =>{
+      const id = req.params.id;
+      const query = {_id: ObjectId(id)};
+      const booking = await bookingCollection.findOne(query);
+      res.send(booking);
+    })
+
+   
+  }
   finally {
 
   }
