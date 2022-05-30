@@ -123,16 +123,32 @@ async function run() {
     const doctorCollection = client.db('doctors_portal').collection('doctors');
     const paymentCollection = client.db('doctors_portal').collection('payments');
     // verifyAdmin
-    const verifyAdmin = async (req, res, next) => {
-      const requester = req.decoded.email;
-      const requesterAccount = await userCollection.findOne({ email: requester });
-      if (requesterAccount.role === 'admin') {
-        next();
-      }
-      else {
-        res.status(403).send({ message: 'forbidden' });
-      }
-    }  }
+const verifyAdmin = async (req, res, next) => {
+  const requester = req.decoded.email;
+  const requesterAccount = await userCollection.findOne({ email: requester });
+  if (requesterAccount.role === 'admin') {
+    next();
+  }
+  else {
+    res.status(403).send({ message: 'forbidden' });
+  }
+}
+// create payment method for stripe 
+app.post('/create-payment-intent', verifyJWT, async(req, res) =>{
+  const service = req.body;
+  const price = service.price;
+  const amount = price*100;
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount : amount,
+    currency: 'usd',
+    payment_method_types:['card']
+  });
+  res.send({clientSecret: paymentIntent.client_secret})
+});
+
+
+   
+  }
   finally {
 
   }
