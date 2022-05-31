@@ -122,6 +122,7 @@ async function run() {
     const userCollection = client.db('doctors_portal').collection('user');
     const doctorCollection = client.db('doctors_portal').collection('doctors');
     const paymentCollection = client.db('doctors_portal').collection('payments');
+    const reviewCollection = client.db('doctors_portal').collection('review');
     // verifyAdmin
 const verifyAdmin = async (req, res, next) => {
   const requester = req.decoded.email;
@@ -146,6 +147,13 @@ app.post('/create-payment-intent', verifyJWT, async(req, res) =>{
   res.send({clientSecret: paymentIntent.client_secret})
 });
 
+// addreview 
+app.post('/addReview', async (req, res) => {
+  const newItem = req.body;
+  res.send({result: 'data receive'})
+  const result = await reviewCollection.insertOne(newItem);
+  console.log('data post database', result.insertedId)
+})
 
     app.get('/service', async (req, res) => {
       const query = {};
