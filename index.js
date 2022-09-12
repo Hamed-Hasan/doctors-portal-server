@@ -14,7 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 
-const uri = `mongodb://doctor_portal:wAa2Y5Ns1TYCIAFk@cluster0-shard-00-00.gtdem.mongodb.net:27017,cluster0-shard-00-01.gtdem.mongodb.net:27017,cluster0-shard-00-02.gtdem.mongodb.net:27017/?ssl=true&replicaSet=atlas-5nn6hp-shard-0&authSource=admin&retryWrites=true&w=majority`;
+const uri = `mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0-shard-00-00.gtdem.mongodb.net:27017,cluster0-shard-00-01.gtdem.mongodb.net:27017,cluster0-shard-00-02.gtdem.mongodb.net:27017/?ssl=true&replicaSet=atlas-5nn6hp-shard-0&authSource=admin&retryWrites=true&w=majority`;
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
@@ -169,10 +169,9 @@ app.get('/showReview', async (req, res) => {
     });
 
     // show all email users
-    app.get('/user', (req, res) => {
-      // const user = await userCollection.find().toArray();
-      // res.send(user);
-      res.send('hell world')
+    app.get('/user',verifyJWT, async (req, res) => {
+      const user = await userCollection.find().toArray();
+      res.send(user);
     })
 
 
