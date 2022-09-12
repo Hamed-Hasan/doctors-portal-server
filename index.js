@@ -155,6 +155,12 @@ app.post('/addReview', async (req, res) => {
   console.log('data post database', result.insertedId)
 })
 
+// show review
+app.get('/showReview', async (req, res) => {
+  const query = {};
+  const result = await reviewCollection.find(query).toArray();
+  res.send(result);
+})
     app.get('/service', async (req, res) => {
       const query = {};
       const cursor = serviceCollection.find(query).project({name: 1});
