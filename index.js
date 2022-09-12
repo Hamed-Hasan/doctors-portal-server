@@ -169,9 +169,10 @@ app.get('/showReview', async (req, res) => {
     });
 
     // show all email users
-    app.get('/user', async (req, res) => {
-      const user = await userCollection.find().toArray();
-      res.send(user);
+    app.get('/user', (req, res) => {
+      // const user = await userCollection.find().toArray();
+      // res.send(user);
+      res.send('hell world')
     })
 
 
