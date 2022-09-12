@@ -169,7 +169,7 @@ app.get('/showReview', async (req, res) => {
     });
 
     // show all email users
-    app.get('/user',verifyJWT, async (req, res) => {
+    app.get('/user', async (req, res) => {
       const user = await userCollection.find().toArray();
       res.send(user);
     })
