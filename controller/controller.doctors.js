@@ -130,3 +130,17 @@ module.exports.getIdByBooking = async (req, res, next) => {
         next(error);
     }
 }
+module.exports.getAllDoctors = async (req, res, next) => {
+    try {
+        const db = getDb();
+        const doctors = await db.collection("doctors").find().toArray();
+
+        res.status(200).json({    
+            success: true,
+            data: doctors
+        })
+
+    } catch (error) {
+        next(error);
+    }
+}
