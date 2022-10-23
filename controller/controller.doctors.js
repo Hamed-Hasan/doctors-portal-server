@@ -31,3 +31,17 @@ module.exports.getAllReviews = async (req, res, next) => {
         next(error);
     }
 }
+module.exports.getAllUser = async (req, res, next) => {
+    try {
+        const db = getDb();
+        const user = await db.collection("user").find().toArray();
+
+        res.status(200).json({    
+            success: true,
+            data: user
+        })
+
+    } catch (error) {
+        next(error);
+    }
+}

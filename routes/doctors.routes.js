@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.get('/service', doctorsController.getAllService)
 router.get('/showReview', doctorsController.getAllReviews)
+router.get('/user',verifyJWT, doctorsController.getAllUser)
 
 
 module.exports = router;
