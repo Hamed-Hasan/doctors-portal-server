@@ -264,3 +264,14 @@ module.exports.updateUserEmail = async (req, res, next) => {
         next(error);
     }
 }
+module.exports.deleteDoctorByMail = async (req, res, next) => {
+    try {
+        const db = getDb();
+        const email = req.params.email;
+        const filter = { email: email };
+        const result = await db.collection("doctors").deleteOne(filter)
+        res.send(result)
+    } catch (error) {
+        next(error);
+    }
+}

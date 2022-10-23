@@ -28,4 +28,7 @@ router.patch("/booking/:id", verifyJWT , doctorsController.updatePaymentByMail)
 router.put("/user/admin/:email", verifyJWT, doctorsController.updateCreateAdmin)
 router.put("/user/:email", doctorsController.updateUserEmail)
 
+// DELETE METHODS
+router.delete("/doctor/:email", verifyJWT, doctorsController.deleteDoctorByMail)
+
 module.exports = router;
