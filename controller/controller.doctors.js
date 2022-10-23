@@ -45,3 +45,20 @@ module.exports.getAllUser = async (req, res, next) => {
         next(error);
     }
 }
+module.exports.getCheckAdmin = async (req, res, next) => {
+    try {
+        const db = getDb();
+        const email = req.params.email;
+        const user = await db.collection("user").findOne({email: email});
+        const isAdmin = user.role === 'admin';
+        res.send({admin: isAdmin})
+
+        res.status(200).json({    
+            success: true,
+            data: user
+        })
+
+    } catch (error) {
+        next(error);
+    }
+}
