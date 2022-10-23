@@ -1,4 +1,5 @@
 const { ObjectId } = require("mongodb");
+const jwt = require('jsonwebtoken');
 const { getDb } = require("../utils/dbConnect");
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const sendAppointmentEmail = require('../middleware/email')
@@ -219,6 +220,29 @@ module.exports.updatePaymentByMail = async (req, res, next) => {
         const updatedBooking = await db.collection("bookings").updateOne(filter, updatedDoc);
         sendPaymentConfirmationEmail(payment)
         res.send(updatedBooking);
+    } catch (error) {
+        next(error);
+    }
+}
+module.exports.updateCreateAdmin = async (req, res, next) => {
+    try {
+        const db = getDb();
+        const email = req.params.email;
+        // admin verify new code
+        // const requester = req.decoded.email;
+        // const requesterAccount = await userCollection.findOne({ email: requester });
+        // if(requesterAccount.role === 'admin') {
+           // admin verify conditions old code
+          const filter = { email: email };
+          const options = { upsert: true };
+          const updateDoc = {
+            $set: {role: 'admin'},
+          };
+          const result = await db.collection("user").updateOne(filter, updateDoc, options);
+          res.send( result);
+        // }else{
+        //   res.status(403).send({message: 'forbidden'});
+        // }
     } catch (error) {
         next(error);
     }
