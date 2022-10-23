@@ -29,6 +29,7 @@ router.put("/user/admin/:email", verifyJWT, doctorsController.updateCreateAdmin)
 router.put("/user/:email", doctorsController.updateUserEmail)
 
 // DELETE METHODS
-router.delete("/doctor/:email", verifyJWT, doctorsController.deleteDoctorByMail)
+router.delete("/doctor/:email", verifyJWT, verifyAdmin ,  doctorsController.deleteDoctorByMail)
+router.delete("/user/:email", verifyJWT, verifyAdmin ,  doctorsController.deleteUserByMail)
 
 module.exports = router;
