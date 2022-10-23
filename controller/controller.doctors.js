@@ -16,3 +16,18 @@ module.exports.getAllService = async (req, res, next) => {
         next(error);
     }
 }
+module.exports.getAllReviews = async (req, res, next) => {
+    try {
+        const db = getDb();
+        const query = {};
+        const review = await db.collection("review").find(query).toArray();
+        
+        res.status(200).json({    
+            success: true,
+            data: review
+        })
+
+    } catch (error) {
+        next(error);
+    }
+}

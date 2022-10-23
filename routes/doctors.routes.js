@@ -6,6 +6,7 @@ const verifyAdmin = require('../middleware/verifyAdmin');
 const router = express.Router();
 
 router.get('/service', doctorsController.getAllService)
+router.get('/showReview', doctorsController.getAllReviews)
 
 
 module.exports = router;
