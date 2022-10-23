@@ -26,5 +26,6 @@ router.patch("/booking/:id", verifyJWT , doctorsController.updatePaymentByMail)
 
 // PUT METHODS
 router.put("/user/admin/:email", verifyJWT, doctorsController.updateCreateAdmin)
+router.put("/user/:email", doctorsController.updateUserEmail)
 
 module.exports = router;

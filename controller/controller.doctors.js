@@ -247,3 +247,20 @@ module.exports.updateCreateAdmin = async (req, res, next) => {
         next(error);
     }
 }
+module.exports.updateUserEmail = async (req, res, next) => {
+    try {
+        const db = getDb();
+        const email = req.params.email;
+        const user = req.body;
+        const filter = { email: email };
+        const options = { upsert: true };
+        const updateDoc = {
+          $set: user,
+        };
+        const result = await db.collection("user").updateOne(filter, updateDoc, options);
+        const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' })
+        res.send({ result, token });
+    } catch (error) {
+        next(error);
+    }
+}
