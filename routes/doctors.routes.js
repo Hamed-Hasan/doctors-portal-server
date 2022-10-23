@@ -19,6 +19,9 @@ router.get("/doctors", verifyJWT, verifyAdmin, doctorsController.getAllDoctors);
 router.post("/create-payment-intent", verifyJWT, doctorsController.createPaymentIntent)
 router.post("/addReview", doctorsController.createReview)
 router.post("/booking", doctorsController.createBooking)
-router.post("/doctors", doctorsController.createDoctor)
+router.post("/doctors",verifyJWT,verifyAdmin, doctorsController.createDoctor)
+
+// PATCH METHODS
+router.patch("/booking/:id", doctorsController.updatePaymentByMail)
 
 module.exports = router;

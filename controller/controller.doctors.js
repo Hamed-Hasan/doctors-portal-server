@@ -2,6 +2,7 @@ const { ObjectId } = require("mongodb");
 const { getDb } = require("../utils/dbConnect");
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const sendAppointmentEmail = require('../middleware/email')
+const sendPaymentConfirmationEmail = require('../middleware/sendMail')
 
 module.exports.getAllService = async (req, res, next) => {
     try {
@@ -197,6 +198,27 @@ module.exports.createDoctor = async (req, res, next) => {
         const body = req.body;
         const doctor = await db.collection("doctors").insertOne(body)
         res.send(doctor);
+    } catch (error) {
+        next(error);
+    }
+}
+module.exports.updatePaymentByMail = async (req, res, next) => {
+    try {
+        const db = getDb();
+        const id  = req.params.id;
+        const payment = req.body;
+        const filter = {_id: ObjectId(id)};
+        const updatedDoc = {
+          $set: {
+            paid: true,
+            transactionId: payment.transactionId
+          }
+        }
+  
+        const result = await db.collection("payments").insertOne(payment);
+        const updatedBooking = await db.collection("bookings").updateOne(filter, updatedDoc);
+        sendPaymentConfirmationEmail(payment)
+        res.send(updatedBooking);
     } catch (error) {
         next(error);
     }
