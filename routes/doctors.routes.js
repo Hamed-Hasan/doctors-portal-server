@@ -10,6 +10,7 @@ router.get('/showReview', doctorsController.getAllReviews)
 router.get('/user',verifyJWT, doctorsController.getAllUser)
 router.get('/admin/:email', doctorsController.getCheckAdmin)
 router.get('/available', doctorsController.getAvailableAllAppointments)
+router.get('/booking',verifyJWT , doctorsController.getVerifyBooking)
 
 
 module.exports = router;

@@ -95,3 +95,22 @@ module.exports.getAvailableAllAppointments = async (req, res, next) => {
         next(error);
     }
 }
+module.exports.getVerifyBooking = async (req, res, next) => {
+    try {
+        const db = getDb();
+        const patient = req.query.patient;
+        const decodedEmail = req.decoded.email;
+        if (patient === decodedEmail) {
+          const query = { patient: patient };
+          const bookings = await db.collection("bookings").find(query).toArray();
+          return res.send(bookings);
+        }
+        else {
+          return res.status(403).send({ message: 'forbidden access' });
+        }
+   
+
+    } catch (error) {
+        next(error);
+    }
+}
