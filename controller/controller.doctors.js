@@ -161,3 +161,15 @@ module.exports.createPaymentIntent = async (req, res, next) => {
         next(error);
     }
 }
+module.exports.createReview = async (req, res, next) => {
+    try {
+        const db = getDb();
+        const newItem = req.body;
+        res.send({result: 'data receive'})
+        const result = await db.collection("review").insertOne(newItem);
+        console.log('data post database', result.insertedId)
+
+    } catch (error) {
+        next(error);
+    }
+}

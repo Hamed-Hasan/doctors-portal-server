@@ -17,4 +17,6 @@ router.get("/doctors", verifyJWT, verifyAdmin, doctorsController.getAllDoctors);
 
 // POST METHODS
 router.post("/create-payment-intent", verifyJWT, doctorsController.createPaymentIntent)
+router.post("/addReview", doctorsController.createReview)
+
 module.exports = router;
