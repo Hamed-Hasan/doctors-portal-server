@@ -1,5 +1,6 @@
 const { ObjectId } = require("mongodb");
 const { getDb } = require("../utils/dbConnect");
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 module.exports.getAllService = async (req, res, next) => {
     try {
@@ -139,6 +140,22 @@ module.exports.getAllDoctors = async (req, res, next) => {
             success: true,
             data: doctors
         })
+
+    } catch (error) {
+        next(error);
+    }
+}
+module.exports.createPaymentIntent = async (req, res, next) => {
+    try {
+        const service = req.body;
+        const price = service.price;
+        const amount = price*100;
+        const paymentIntent = await stripe.paymentIntents.create({
+          amount : amount,
+          currency: 'usd',
+          payment_method_types:['card']
+        });
+        res.send({clientSecret: paymentIntent.client_secret})
 
     } catch (error) {
         next(error);
