@@ -114,3 +114,19 @@ module.exports.getVerifyBooking = async (req, res, next) => {
         next(error);
     }
 }
+module.exports.getIdByBooking = async (req, res, next) => {
+    try {
+        const db = getDb();
+        const id = req.params.id;
+        const query = {_id: ObjectId(id)};
+        const booking = await db.collection("bookings").findOne(query);
+
+        res.status(200).json({    
+            success: true,
+            data: booking
+        })
+
+    } catch (error) {
+        next(error);
+    }
+}
