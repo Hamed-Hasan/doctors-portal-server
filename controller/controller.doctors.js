@@ -191,3 +191,13 @@ module.exports.createBooking = async (req, res, next) => {
         next(error);
     }
 }
+module.exports.createDoctor = async (req, res, next) => {
+    try {
+        const db = getDb();
+        const body = req.body;
+        const doctor = await db.collection("doctors").insertOne(body)
+        res.send(doctor);
+    } catch (error) {
+        next(error);
+    }
+}
