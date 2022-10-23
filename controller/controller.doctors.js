@@ -1,6 +1,7 @@
 const { ObjectId } = require("mongodb");
 const { getDb } = require("../utils/dbConnect");
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const sendAppointmentEmail = require('../middleware/email')
 
 module.exports.getAllService = async (req, res, next) => {
     try {
@@ -169,6 +170,23 @@ module.exports.createReview = async (req, res, next) => {
         const result = await db.collection("review").insertOne(newItem);
         console.log('data post database', result.insertedId)
 
+    } catch (error) {
+        next(error);
+    }
+}
+module.exports.createBooking = async (req, res, next) => {
+    try {
+        const db = getDb();
+        const booking = req.body;
+        const query = { treatment: booking.treatment, date: booking.date, patient: booking.patient }
+        const exists = await db.collection("bookings").findOne(query);
+        if (exists) {
+          return res.send({ success: false, booking: exists })
+        }
+        const result = await db.collection("bookings").insertOne(booking);
+        console.log('sending email');
+        sendAppointmentEmail(booking);
+        return res.send({ success: true, result });
     } catch (error) {
         next(error);
     }
